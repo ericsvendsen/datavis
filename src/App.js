@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import 'whatwg-fetch';
+import Map from './components/Map/Map';
+
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [data, setData] = useState(null);
+    const getData = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/data.json');
+            const json = await response.json();
+            if (response.status === 200) {
+                return json;
+            } else {
+                console.log(response.statusText);
+            }
+        } catch (err) {
+            console.log(err);
+            // return toast(err.message, { type: toast.TYPE.ERROR, autoClose: 3000 });
+        }
+    };
+    getData().then(d => {
+        setData(d);
+    });
+    return (
+        <div className="App">
+            <Map data={data} />
+        </div>
+    );
 }
 
 export default App;

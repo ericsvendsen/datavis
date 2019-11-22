@@ -1,0 +1,16 @@
+.tooltip {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    color: #fff;
+    background: rgba(33, 33, 33, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.tooltip ul {
+    list-style-type: none;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
