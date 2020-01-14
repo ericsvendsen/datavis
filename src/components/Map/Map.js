@@ -3,8 +3,8 @@ import DeckGL from '@deck.gl/react';
 import { HexagonLayer } from '@deck.gl/aggregation-layers';
 import { StaticMap } from 'react-map-gl';
 
-// TODO use scss
-import './Map.css';
+import '../../assets/mapbox-gl.css';
+import './Map.scss';
 
 const Map = ({ data }) => {
     const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiZXN2ZW5kc2VuIiwiYSI6ImNrMzlyNnpoNzA2ZnQzY213dDBkdmdudGYifQ.PufBhISmr7at_MBeUe_kNg';
@@ -22,10 +22,9 @@ const Map = ({ data }) => {
     const handleOnHover = ({ object, x, y }) => {
         if (object) {
             const dataArr = [];
-            // TODO key
-            object.points.forEach(point => {
+            object.points.forEach((point, idx) => {
                 dataArr.push(
-                    <ul>
+                    <ul key={idx}>
                         <li>{point.ADDRESS}</li>
                         <li>Racks: {point.RACKS}</li>
                         <li>Spaces: {point.SPACES}</li>
@@ -37,8 +36,9 @@ const Map = ({ data }) => {
                     {dataArr}
                 </div>
             );
+        } else {
+            setTooltipEl(<div />);
         }
-        // TODO set empty div
     };
 
     const layer = new HexagonLayer({
@@ -53,18 +53,20 @@ const Map = ({ data }) => {
     });
 
     return (
-        <DeckGL
-            initialViewState={initialViewState}
-            controller={true}
-            layers={layer}
-        >
+        <>
+            <DeckGL
+                initialViewState={initialViewState}
+                controller={true}
+                layers={layer}
+            >
+                <StaticMap
+                    attributionControl={false}
+                    mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
+                    mapStyle="mapbox://styles/mapbox/dark-v8"
+                />
+            </DeckGL>
             {tooltipEl}
-            <StaticMap
-                attributionControl={false}
-                mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
-                mapStyle="mapbox://styles/mapbox/dark-v8"
-            />
-        </DeckGL>
+        </>
     );
 };
 

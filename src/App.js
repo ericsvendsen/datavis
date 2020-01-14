@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'whatwg-fetch';
 import Map from './components/Map/Map';
 
-import './App.css';
+import './App.scss';
 
 function App() {
     const [data, setData] = useState(null);
@@ -11,7 +11,7 @@ function App() {
             const response = await fetch('http://localhost:3000/data.json');
             const json = await response.json();
             if (response.status === 200) {
-                return json;
+                setData(json);
             } else {
                 console.log(response.statusText);
             }
@@ -20,9 +20,9 @@ function App() {
             // return toast(err.message, { type: toast.TYPE.ERROR, autoClose: 3000 });
         }
     };
-    getData().then(d => {
-        setData(d);
-    });
+    useEffect(() => {
+        getData();
+    }, []);
     return (
         <div className="App">
             <Map data={data} />
